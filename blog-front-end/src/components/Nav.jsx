@@ -2,9 +2,11 @@
 import { useState, useEffect } from "react";
 // import PropTypes from "prop-types"; // Import PropTypes
 import logoSVG from "../assets/logo.svg";
+import {Link, useLocation} from "react-router-dom";
 
 export default function Nav() {
   const [navBarIsActive, setNavBarIsActive] = useState(false);
+  const location= useLocation();
 
   function toggleNavBarIsActive() {
     setNavBarIsActive(!navBarIsActive);
@@ -19,9 +21,9 @@ export default function Nav() {
     <>
       <nav className="navbar is-white is-spaced" aria-label="main-navigation">
         <div className="navbar-brand">
-          <a className="navbar-item">
+          <Link to="/" className="navbar-item">
             <img src={logoSVG} style={logoStyle} />
-          </a>
+          </Link>
 
           <a
             role="button"
@@ -43,11 +45,11 @@ export default function Nav() {
           className={navBarIsActive ? "navbar-menu is-active" : "navbar-menu"}
         >
           <div className="navbar-start">
-            <a className="navbar-item">Home</a>
-            <a className="navbar-item">Bio</a>
-            <a className="navbar-item">Contacts</a>
+            <Link to="/" className={location.pathname ==="/" ? "navbar-item is-active is-tab" : "navbar-item"}>Home</Link>
+            <Link to="/aboutUs" className={location.pathname ==="/aboutUs" ? "navbar-item is-active is-tab" : "navbar-item"}>About Us</Link>
+            {/* <a className="navbar-item">Contacts</a> */}
 
-            <div className="navbar-item has-dropdown is-hoverable">
+            {/* <div className="navbar-item has-dropdown is-hoverable">
               <a className="navbar-link">More</a>
               <div className="navbar-dropdown">
                 <a className="navbar-item">Link1</a>
@@ -56,14 +58,14 @@ export default function Nav() {
                 <hr className="navbar-divider" />
                 <a className="navbar-item">Report an issue</a>
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className="navbar-end">
             <div className="navbar-item">
               <div className="buttons are-medium">
-                <a className="button is-primary">Sign up</a>
-                <a className="button is-light">Log in</a>
+                <Link to="/signUp" className="button is-primary">Sign up</Link>
+                <Link to="/login" className="button is-light">Log in</Link>
               </div>
             </div>
           </div>
