@@ -5,7 +5,7 @@ import PropTypes from "prop-types"; // Import PropTypes
 export default function Hero({ title, subtitle }) {
   return (
     <>
-      <section className="hero is-primary is-small-with-navbar">
+      <section className="hero is-primary is-small-with-navbar block">
         <div className="hero-body">
           <p className="title">{title}</p>
           <p className="subtitle">{subtitle}</p>
