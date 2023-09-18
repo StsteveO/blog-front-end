@@ -1,11 +1,19 @@
 //eslint-disable-next-line
 import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignUp = () => {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    firstName: "",
+    bio: "",
+    username: "",
+    password: "",
+    passwordConfirmation: "",
+  });
   const [passwordsMatch, setPasswordsMatch]= useState(true);
   const formRef= useRef(null);
+  const [errors, setErrors]= useState([]);
+  const navigate= useNavigate();
 
   const handleFormChange= (event) =>{
     const name= event.target.name;
@@ -13,12 +21,28 @@ const SignUp = () => {
     setFormData(values => ({...values, [name]: value}));
   }
 
-  const handleFormSubmit = (event) => {
+  const handleFormSubmit = async(event) => {
     event.preventDefault();
     if(formData.password === formData.passwordConfirmation){
-      console.log(formData);
       setPasswordsMatch(true);
       //formRef.current.submit(); //submits the form
+      const response= await fetch("http://localhost:3000/blog/sign_up", {
+        method: "POST",
+        body: JSON.stringify(formData),
+        headers:{
+        "Content-Type": "application/json",
+        },
+      });
+
+      if (response.status === 200) {
+        navigate("/login");
+      } else if (response.status === 400) {
+        let responseData = await response.json();
+        setErrors(responseData.errors);
+      } else if (response.status === 500) {
+        let responseData = await response.json();
+        setErrors([responseData.error]);
+      }
     }else{
       setPasswordsMatch(false);
     }
@@ -47,6 +71,28 @@ const SignUp = () => {
                 <span className="icon is-left">
                   <i className="fas fa-user"></i>
                 </span>
+              </div>
+            </label>
+          </div>
+
+          <div className="field">
+            <label className="label">
+              {" "}
+              Tell us a little about yourself:
+              <div className="control has-icons-left">
+                <textarea
+                  name="bio"
+                  value={formData.bio || ""}
+                  onChange={handleFormChange}
+                  className="textarea is-medium has-fixed-size"
+                  type="textarea"
+                  placeholder="Bio"
+                  rows="5"
+                  required
+                />
+                {/* <span className="icon is-left">
+                  <i className="fas fa-user"></i>
+                </span> */}
               </div>
             </label>
           </div>
@@ -115,6 +161,16 @@ const SignUp = () => {
           </div>
 
           {!passwordsMatch && (<p className="notification is-danger is-size-4">Passwords do not match.</p>)}
+          {errors.length > 0 && (
+            <div className="notification is-danger is-size-4">
+              <p>Validation Errors</p>
+              <ul>
+                {errors.map((error, index)=>(
+                  <li key={index}>{error.msg}</li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <div className="field is-grouped">
             <div className="control">
