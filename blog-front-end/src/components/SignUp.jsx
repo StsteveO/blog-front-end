@@ -41,7 +41,7 @@ const SignUp = () => {
         setErrors(responseData.errors);
       } else if (response.status === 500) {
         let responseData = await response.json();
-        setErrors([responseData.error]);
+        setErrors(responseData.errors);
       }
     }else{
       setPasswordsMatch(false);
@@ -50,7 +50,7 @@ const SignUp = () => {
 
   return (
     <>
-      <h1 className="section title"> Sign Up</h1>
+      <div className="section title">Sign Up</div>
 
       <section className="section">
         <form ref={formRef} onSubmit={handleFormSubmit} method="POST" action="http://localhost:3000/blog/sign_up">
