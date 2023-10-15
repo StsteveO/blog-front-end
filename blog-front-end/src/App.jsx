@@ -13,6 +13,8 @@ import UserDashboard from "./components/UserDashboard";
 import NewCategory from "./components/NewCategory";
 import { useParams } from "react-router-dom";
 import NewArtical from "./components/NewArtical";
+import SingleArtical from "./components/SingleArticle";
+import { useNavigate } from "react-router-dom";
 
 // example
 //<div className="icon-text">
@@ -25,11 +27,55 @@ import NewArtical from "./components/NewArtical";
 function App() {
   //eslint-disable-next-line
   // const [count, setCount] = useState(0);
+  const navigate = useNavigate();
 
   const { name } = useParams();
 
   const websiteTitle = "Welcome to blogDev";
-  const websiteSubtitle = "The blog for developers";
+  const websiteSubtitle = "Another developer...another blog";
+
+  function decodeHTMLString(encodedHTMLString) {
+    let parser = new DOMParser();
+    let dom = parser.parseFromString(
+      "<!doctype html><body>" + encodedHTMLString,
+      "text/html"
+    );
+    return dom.body.textContent;
+  }
+
+  const [clientArticles, setClientArticles] = useState([]);
+  const [article, setArticle] = useState();
+
+  useEffect(() => {
+    fetch("http://localhost:3000/blog/articles_client")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        const clientArticlesData = data.map((article) => {
+          return {
+            articleId: article._id,
+            title: article.title,
+            preview: decodeHTMLString(article.preview),
+            category: article.category.name,
+            categoryId: article.category._id,
+            author: article.author.first_name,
+            authorId: article.author._id,
+            picture_decoded: decodeHTMLString(article.article_picture),
+            picture_credit: article.picture_credit,
+            article_body: decodeHTMLString(article.article_body),
+          };
+        });
+        setClientArticles(clientArticlesData);
+      });
+  }, []);
+
+  function singlePickedArticle(event) {
+    let singleArticle = clientArticles.filter((article) => {
+      return article.articleId === event.target.id;
+    });
+    setArticle(singleArticle[0]);
+    navigate("/singleArtical");
+  }
 
   return (
     <>
@@ -49,8 +95,13 @@ function App() {
           <NewCategory />
         ) : name === "newArtical" ? (
           <NewArtical />
+        ) : name === "singleArtical" ? (
+          <SingleArtical article={article} />
         ) : (
-          <DefaultPage />
+          <DefaultPage
+            clientArticles={clientArticles}
+            singlePickedArticle={singlePickedArticle}
+          />
         )}
       </div>
     </>
