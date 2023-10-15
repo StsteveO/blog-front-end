@@ -7,8 +7,6 @@ const UserDashboard = () => {
   //eslint-disable-next-line
   const navigate = useNavigate();
   const authToken = localStorage.getItem("authToken");
-  //eslint-disable-next-line
-  const userId = localStorage.getItem("userId");
 
   useEffect(() => {
     if (!authToken) {

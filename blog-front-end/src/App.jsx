@@ -44,10 +44,12 @@ function App() {
     return dom.body.textContent;
   }
 
+  // client
   const [clientArticles, setClientArticles] = useState([]);
   const [article, setArticle] = useState();
   const [categoryTitle, setCategoryTitle]= useState();
   const [singleCategoryList, setSingleCategoryList]= useState([]);
+  // user
 
   useEffect(() => {
     fetch("http://localhost:3000/blog/articles_client")
