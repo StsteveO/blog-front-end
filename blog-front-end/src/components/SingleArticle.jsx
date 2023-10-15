@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
-const SingleArtical = ({ article }) => {
+const SingleArtical = ({ article, singlePickedCategory }) => {
   const navigate = useNavigate();
 
   function handleHomeBtn() {
@@ -10,10 +10,24 @@ const SingleArtical = ({ article }) => {
 
   return (
     <>
+      <button className="button is-link is-small mb-5" onClick={handleHomeBtn}>
+        <span className="icon">
+          <i className="fas fa-home"></i>
+        </span>
+        <span>Home</span>
+      </button>
+
+      <figure className="image mb-0">
+        <img src={article.picture_decoded} alt="Article picture" />
+      </figure>
+      <figcaption className="mb-5">
+        Picture credit: {article.picture_credit}
+      </figcaption>
+
       <div className="section is-medium pt-4">
         <div className="container">
           <div className="content">
-            <button
+            {/* <button
               className="button is-link is-small mb-2"
               onClick={handleHomeBtn}
             >
@@ -21,19 +35,28 @@ const SingleArtical = ({ article }) => {
                 <i className="fas fa-home"></i>
               </span>
               <span>Home</span>
-            </button>
-            <figure className="image mb-0">
+            </button> */}
+            {/* <figure className="image mb-0">
               <img src={article.picture_decoded} alt="Article picture" />
             </figure>
             <figcaption className="mb-5">
               Picture credit: {article.picture_credit}
-            </figcaption>
+            </figcaption> */}
             <div className="title">
               {article.title}{" "}
-              <span className="tag is-info">{article.category}</span>
+              <span
+                id={article.categoryId}
+                onClick={singlePickedCategory}
+                className="tag is-info is-clickable"
+              >
+                {article.category}
+              </span>
             </div>
             <div className="subtitle">{article.author}</div>
-            <div className="" dangerouslySetInnerHTML={{ __html: article.article_body }} />
+            <div
+              className=""
+              dangerouslySetInnerHTML={{ __html: article.article_body }}
+            />
 
             <button
               className="button is-link is-small mt-6"
@@ -44,7 +67,6 @@ const SingleArtical = ({ article }) => {
               </span>
               <span>Home</span>
             </button>
-
           </div>
         </div>
       </div>
@@ -55,6 +77,7 @@ export default SingleArtical;
 
 SingleArtical.propTypes = {
   article: PropTypes.any.isRequired,
+  singlePickedCategory: PropTypes.any.isRequired,
 };
 
 // articleId: "651de1424d239eda51acc240";

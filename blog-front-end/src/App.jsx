@@ -15,6 +15,7 @@ import { useParams } from "react-router-dom";
 import NewArtical from "./components/NewArtical";
 import SingleArtical from "./components/SingleArticle";
 import { useNavigate } from "react-router-dom";
+import SingleCategory from "./components/SingleCategory";
 
 // example
 //<div className="icon-text">
@@ -45,12 +46,13 @@ function App() {
 
   const [clientArticles, setClientArticles] = useState([]);
   const [article, setArticle] = useState();
+  const [categoryTitle, setCategoryTitle]= useState();
+  const [singleCategoryList, setSingleCategoryList]= useState([]);
 
   useEffect(() => {
     fetch("http://localhost:3000/blog/articles_client")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         const clientArticlesData = data.map((article) => {
           return {
             articleId: article._id,
@@ -77,6 +79,16 @@ function App() {
     navigate("/singleArtical");
   }
 
+  function singlePickedCategory(event){
+    let categoryName = event.target.innerText;
+    let singleCategoryArticles= clientArticles.filter((article)=>{
+      return article.categoryId=== event.target.id
+    })
+    setCategoryTitle(categoryName);
+    setSingleCategoryList(singleCategoryArticles);
+    navigate("/singlecategory");
+  }
+
   return (
     <>
       <Nav />
@@ -96,11 +108,22 @@ function App() {
         ) : name === "newArtical" ? (
           <NewArtical />
         ) : name === "singleArtical" ? (
-          <SingleArtical article={article} />
+          <SingleArtical
+            article={article}
+            singlePickedCategory={singlePickedCategory}
+          />
+        ) : name === "singlecategory" ? (
+          <SingleCategory
+            categoryTitle={categoryTitle}
+            singleCategoryList={singleCategoryList}
+            singlePickedArticle={singlePickedArticle}
+            singlePickedCategory={singlePickedCategory}
+          />
         ) : (
           <DefaultPage
             clientArticles={clientArticles}
             singlePickedArticle={singlePickedArticle}
+            singlePickedCategory={singlePickedCategory}
           />
         )}
       </div>
