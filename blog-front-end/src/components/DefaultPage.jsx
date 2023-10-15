@@ -5,6 +5,8 @@ const DefaultPage = () => {
   return (
     <>
       <h1> This is the Default Home page.</h1>
+      <p>Hello world</p>
+      <p>How are you doing</p>
     </>
   );
 };
