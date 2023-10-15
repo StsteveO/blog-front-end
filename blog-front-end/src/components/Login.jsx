@@ -35,7 +35,7 @@ const Login = () => {
       const responseData= await response.json();
       const token= responseData.token
       localStorage.setItem("authToken", token);
-      localStorage.setItem("userId", responseData.userId);
+      // localStorage.setItem("userId", responseData.userId);
       navigate("/userDashboard");
     }else if(response.status === 400){
       let responseData= await response.json();
