@@ -5,6 +5,9 @@ import { Link, useNavigate } from "react-router-dom";
 
 const UserDashboard = () => {
   const [userArticles, setUserArticles] = useState([]);
+  const [modal, setModal]= useState(false);
+  const [articleToDelete, setArticleToDelete]= useState();
+  const [errors, setErrors]= useState([]);
   //eslint-disable-next-line
   const navigate = useNavigate();
   const authToken = localStorage.getItem("authToken");
@@ -71,9 +74,82 @@ const UserDashboard = () => {
     navigate("/newArtical");
   };
 
+  const toggleModal=(event)=>{
+    if(event.target.id){
+      setArticleToDelete(event.target.id);
+    }
+    setModal(!modal);
+  };
+
+  const deletePost= async()=>{
+    console.log(articleToDelete);
+    let articleToDeleteObj = { articleToDelete: articleToDelete };
+    const response = await fetch("http://localhost:3000/blog/article_delete", {
+      method: "POST",
+      body: JSON.stringify(articleToDeleteObj),
+      headers: headers
+    });
+
+    if(response.status === 200){
+      let responseData= await response.json();
+      console.log(responseData);
+    }
+    if(response.status === 400){
+      let responseData = await response.json();
+      setErrors([responseData.errors]);
+    }
+    if (response.status === 401) {
+      let responseData = await response.json();
+      setErrors([responseData.errors]);
+    }
+    if (response.status === 500) {
+      let responseData = await response.json();
+      setErrors([responseData.errors]);
+    }
+
+    setArticleToDelete("");
+    setModal(false);
+    navigate("/userDashboard");
+  }
+
   return (
     <>
-      {console.log(userArticles)}
+      {errors.length>0 && (
+        <div className="notification is-danger is-size-4">
+          <p>Validation Errors</p>
+          <ul>
+            {errors.map((error, index)=>(
+              <li key={index}>{error.msg}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+      <div className={modal ? "modal is-active" : "modal"}>
+        <div className="modal-background" onClick={toggleModal}></div>
+        <div className="modal-content box">
+          <div className="title mb-1">This is a DESTRUCTIVE ACT!</div>
+          <div>This act cannot be undone</div>
+          <div className="subtitle is-underlined">
+            Are you sure you want to DELETE the following post:
+          </div>
+          <div className="buttons are-medium">
+            <button
+              className="button is-danger"
+              onClick={deletePost} //delete
+            >
+              <span>Delete</span>
+            </button>
+            <button
+              className="button is-dark"
+              onClick={toggleModal} //cancel delete
+            >
+              <span>Cancel</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* {console.log(userArticles)} */}
       <section className="section">
         <div className="title">User Dashboard</div>
 
@@ -127,7 +203,7 @@ const UserDashboard = () => {
                     <div className="buttons">
                       <button
                         className="button is-link"
-                        onClick={""}//edit post
+                        onClick={""} //edit post
                       >
                         <span className="icon">
                           <i className="fas fa-pencil"></i>
@@ -137,12 +213,12 @@ const UserDashboard = () => {
 
                       <button
                         className="button is-danger"
-                        onClick={""}//delete
+                        onClick={toggleModal} //toggle delete modal
                       >
                         <span className="icon">
                           <i className="fas fa-trash"></i>
                         </span>
-                        <span>Delete</span>
+                        <span id={article.articleId}>Delete</span>
                       </button>
                     </div>
                   </div>
