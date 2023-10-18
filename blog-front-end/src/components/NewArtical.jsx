@@ -2,6 +2,10 @@
 import { useState, useEffect } from "react";
 //eslint-disable-next-line
 import { Link, useNavigate } from "react-router-dom";
+//eslint-disable-next-line
+import React, { useRef } from "react";
+import { Editor } from "@tinymce/tinymce-react";
+const tinyMCEApiKey = import.meta.env.VITE_TinyMCE_apiKey;
 
 const NewArtical = () => {
   //eslint-disable-next-line
@@ -54,7 +58,7 @@ const NewArtical = () => {
         );
 
         if (response.status === 200) {
-          console.log("Successfully fetched user");
+          // console.log("Successfully fetched user");
           const data = await response.json();
           setUser(data);
           setFormData((values) => ({ ...values, ["author"]: data.firstName }));
@@ -159,6 +163,21 @@ const NewArtical = () => {
       console.error(error);
     }
   };
+
+  const editorRef = useRef(null);
+  // const log = () => {
+  //   if (editorRef.current) {
+  //     console.log(editorRef.current.getContent());
+  //   }
+  // };
+
+  function updateArticleBody(){
+    console.log(editorRef.current.getContent());
+    setFormData((values) => ({
+      ...values,
+      ["article_body"]: editorRef.current.getContent(),
+    }));
+  }
 
   return (
     <>
@@ -309,7 +328,7 @@ const NewArtical = () => {
             <label className="label">
               {" "}
               Artical Body:
-              <div className="control has-icons-left">
+              {/* <div className="control has-icons-left">
                 <textarea
                   name="article_body"
                   value={formData.article_body || ""}
@@ -320,8 +339,45 @@ const NewArtical = () => {
                   rows="5"
                   required
                 />
-              </div>
+              </div> */}
             </label>
+            <Editor
+              apiKey={tinyMCEApiKey}
+              onInit={(evt, editor) => (editorRef.current = editor)}
+              initialValue=""
+              onEditorChange={updateArticleBody}
+              init={{
+                height: 500,
+                menubar: false,
+                plugins: [
+                  "advlist",
+                  "autolink",
+                  "lists",
+                  "link",
+                  "image",
+                  "charmap",
+                  "preview",
+                  "anchor",
+                  "searchreplace",
+                  "visualblocks",
+                  "code",
+                  "fullscreen",
+                  "insertdatetime",
+                  "media",
+                  "table",
+                  "code",
+                  "help",
+                  "wordcount",
+                ],
+                toolbar:
+                  "undo redo | blocks | " +
+                  "bold italic forecolor | alignleft aligncenter " +
+                  "alignright alignjustify | bullist numlist outdent indent | " +
+                  "removeformat | help | link | image | preview",
+                content_style:
+                  "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+              }}
+            />
           </div>
 
           <div className="field">

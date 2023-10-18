@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@tinymce/tinymce-react": "^4.3.0",
     "react-router-dom": "^6.16.0"
   }
 }
