@@ -2,12 +2,16 @@
 import { useState, useEffect } from "react";
 //eslint-disable-next-line
 import { Link, useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 
-const UserDashboard = () => {
+const UserDashboard = ({ updateArticleToEdit }) => {
+
   const [userArticles, setUserArticles] = useState([]);
-  const [modal, setModal]= useState(false);
-  const [articleToDelete, setArticleToDelete]= useState();
-  const [errors, setErrors]= useState([]);
+  const [modal, setModal] = useState(false);
+  const [selectedArticle, setSelectedArticle] = useState();
+  const [articleToDelete, setArticleToDelete] = useState();
+  const [articleToEdit, setArticleToEdit] = useState();
+  const [errors, setErrors] = useState([]);
   //eslint-disable-next-line
   const navigate = useNavigate();
   const authToken = localStorage.getItem("authToken");
@@ -20,6 +24,15 @@ const UserDashboard = () => {
     );
     return dom.body.textContent;
   }
+
+  useEffect(() => {
+    // console.log("articleToEdit has changed");
+    console.log(articleToEdit);
+    if (articleToEdit){
+      console.log("not empty");
+      updateArticleToEdit(articleToEdit);
+    }
+  }, [articleToEdit]);
 
   useEffect(() => {
     if (!authToken) {
@@ -74,27 +87,43 @@ const UserDashboard = () => {
     navigate("/newArtical");
   };
 
-  const toggleModal=(event)=>{
-    if(event.target.id){
+  const toggleModal = (event) => {
+    if (event.target.id) {
       setArticleToDelete(event.target.id);
+
+      setSelectedArticle(
+        userArticles.find((article) => {
+          return article.articleId === event.target.id;
+        })
+      );
     }
     setModal(!modal);
   };
 
-  const deletePost= async()=>{
+  const startArticleEdit = (event) => {
+    if (event.target.id) {
+      let findArticle = userArticles.find((article) => {
+        return article.articleId === event.target.id;
+      });
+      setArticleToEdit(findArticle);
+    }
+    // updateArticleToEdit(articleToEdit);
+  };
+
+  const deletePost = async () => {
     console.log(articleToDelete);
     let articleToDeleteObj = { articleToDelete: articleToDelete };
     const response = await fetch("http://localhost:3000/blog/article_delete", {
       method: "POST",
       body: JSON.stringify(articleToDeleteObj),
-      headers: headers
+      headers: headers,
     });
 
-    if(response.status === 200){
-      let responseData= await response.json();
+    if (response.status === 200) {
+      let responseData = await response.json();
       console.log(responseData);
     }
-    if(response.status === 400){
+    if (response.status === 400) {
       let responseData = await response.json();
       setErrors([responseData.errors]);
     }
@@ -108,17 +137,18 @@ const UserDashboard = () => {
     }
 
     setArticleToDelete("");
+    setSelectedArticle("");
     setModal(false);
-    navigate("/userDashboard");
-  }
+    location.reload();
+  };
 
   return (
     <>
-      {errors.length>0 && (
+      {errors.length > 0 && (
         <div className="notification is-danger is-size-4">
           <p>Validation Errors</p>
           <ul>
-            {errors.map((error, index)=>(
+            {errors.map((error, index) => (
               <li key={index}>{error.msg}</li>
             ))}
           </ul>
@@ -132,6 +162,35 @@ const UserDashboard = () => {
           <div className="subtitle is-underlined">
             Are you sure you want to DELETE the following post:
           </div>
+
+          {modal && (
+            <article className="media box">
+              <figure className="media-left">
+                <p className="image is-64x64 is-clipped">
+                  <img
+                    src={selectedArticle.picture_decoded}
+                    alt="article picture"
+                  />
+                </p>
+              </figure>
+
+              <div className="media-content">
+                <div className="content">
+                  <div className="title">{selectedArticle.title}</div>
+
+                  {selectedArticle.isActive ? (
+                    <div className="tag is-primary">Active</div>
+                  ) : (
+                    <div className="tag is-warning">Not Active</div>
+                  )}
+                  <div className="tag">{selectedArticle.category}</div>
+
+                  <div className="subtitle">{selectedArticle.author}</div>
+                </div>
+              </div>
+            </article>
+          )}
+
           <div className="buttons are-medium">
             <button
               className="button is-danger"
@@ -203,12 +262,12 @@ const UserDashboard = () => {
                     <div className="buttons">
                       <button
                         className="button is-link"
-                        onClick={""} //edit post
+                        onClick={startArticleEdit} //edit post
                       >
                         <span className="icon">
                           <i className="fas fa-pencil"></i>
                         </span>
-                        <span>Edit</span>
+                        <span id={article.articleId}>Edit</span>
                       </button>
 
                       <button
@@ -241,3 +300,7 @@ const UserDashboard = () => {
   );
 };
 export default UserDashboard;
+
+UserDashboard.propTypes = {
+  updateArticleToEdit: PropTypes.any.isRequired,
+};
