@@ -12,6 +12,8 @@ const UserDashboard = ({ updateArticleToEdit }) => {
   const [articleToDelete, setArticleToDelete] = useState();
   const [articleToEdit, setArticleToEdit] = useState();
   const [errors, setErrors] = useState([]);
+  const [allCategories, setAllCategories]= useState([]);
+  const [categoryDropdown, setCategoryDropdown]= useState(false);
   //eslint-disable-next-line
   const navigate = useNavigate();
   const authToken = localStorage.getItem("authToken");
@@ -73,6 +75,24 @@ const UserDashboard = ({ updateArticleToEdit }) => {
       });
   }, []);
 
+  useEffect(() => {
+    fetch("http://localhost:3000/blog//category_list", {
+      headers: headers,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log(data);
+        const categoryList = data.map((category) => {
+          return {
+            categoryName: category.name,
+            categorySynopsis: category.synopsis,
+            categoryId: category._id,
+          };
+        });
+        setAllCategories(categoryList);
+      });
+  }, []);
+
   const handleLogout = () => {
     localStorage.removeItem("authToken"); //remove token from client storage
     localStorage.removeItem("userId"); //remove id from client storage
@@ -99,6 +119,10 @@ const UserDashboard = ({ updateArticleToEdit }) => {
     }
     setModal(!modal);
   };
+
+  const toggleCategoryDropdown= () =>{
+    setCategoryDropdown(!categoryDropdown)
+  }
 
   const startArticleEdit = (event) => {
     if (event.target.id) {
@@ -235,6 +259,79 @@ const UserDashboard = ({ updateArticleToEdit }) => {
           </button>
         </div>
       </section>
+
+      <div className="section is-small">
+        <div className="container">
+          <div className={categoryDropdown ? "dropdown is-active" : "dropdown"}>
+            <div className="dropdown-trigger">
+              <button className="button is-link" onClick={toggleCategoryDropdown}>
+                <span>Categories</span>
+                <span className="icon">
+                  <i className="fas fa-angle-down"></i>
+                </span>
+              </button>
+            </div>
+            <div className="dropdown-menu">
+              <div className="dropdown-content">
+                {/* <div className="dropdown-item has-text-weight-bold is-underlined my-5">
+                  Item 1
+                  <span>
+                    <div className="buttons">
+                      <button className="button is-link">
+                        <span className="icon">
+                          <i className="fas fa-pencil"></i>
+                        </span>
+                      </button>
+
+                      <button className="button is-danger">
+                        <span className="icon">
+                          <i className="fas fa-trash"></i>
+                        </span>
+                      </button>
+                    </div>
+                  </span>
+                </div> */}
+
+                {/* categoryName: category.name, */}
+                {/* categorySynopsis: category.synopsis, */}
+                {/* categoryId: category._id, */}
+
+                {allCategories.map((category) => {
+                  return (
+                    <article
+                      key={category.categoryId}
+                      className="dropdown-item has-text-weight-bold is-underlined my-5"
+                    >
+                      {category.categoryName}
+                      <span>
+                        <div className="buttons">
+                          <button
+                            className="button is-link"
+                            id={category.categoryId}
+                          >
+                            <span className="icon">
+                              <i className="fas fa-pencil"></i>
+                            </span>
+                          </button>
+
+                          <button
+                            className="button is-danger"
+                            id={category.categoryId}
+                          >
+                            <span className="icon">
+                              <i className="fas fa-trash"></i>
+                            </span>
+                          </button>
+                        </div>
+                      </span>
+                    </article>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div className="section is-medium pt-4">
         <div className="container">
