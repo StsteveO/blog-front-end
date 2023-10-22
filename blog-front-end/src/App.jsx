@@ -17,6 +17,7 @@ import SingleArtical from "./components/SingleArticle";
 import { useNavigate } from "react-router-dom";
 import SingleCategory from "./components/SingleCategory";
 import EditArticle from "./components/EditArticle";
+import EditCategory from "./components/EditCategory";
 
 // example
 //<div className="icon-text">
@@ -50,6 +51,7 @@ function App() {
   const [categoryTitle, setCategoryTitle]= useState();
   const [singleCategoryList, setSingleCategoryList]= useState([]);
   const [articleToEdit, setArticleToEdit]= useState([]);
+  const [categoryToEdit, setCategoryToEdit]= useState([]);
 
   useEffect(() => {
     fetch("http://localhost:3000/blog/articles_client")
@@ -96,13 +98,20 @@ function App() {
     navigate("/editArticle");
   }
 
+  function updateCategoryToEdit(newStateObj){
+    setCategoryToEdit(newStateObj);
+    navigate("/editCategory");
+  }
+
   return (
     <>
       <Nav />
       <Hero title={websiteTitle} subtitle={websiteSubtitle} />
 
       <div>
-        {name === "editArticle" ? (
+        {name === "editCategory" ? (
+          <EditCategory categoryToEdit={categoryToEdit} />
+        ) : name === "editArticle" ? (
           <EditArticle articleToEdit={articleToEdit} />
         ) : name === "aboutUs" ? (
           <AboutUs />
@@ -111,7 +120,10 @@ function App() {
         ) : name === "login" ? (
           <Login />
         ) : name === "userDashboard" ? (
-          <UserDashboard updateArticleToEdit={updateArticleToEdit} />
+          <UserDashboard
+            updateArticleToEdit={updateArticleToEdit}
+            updateCategoryToEdit={updateCategoryToEdit}
+          />
         ) : name === "newCategory" ? (
           <NewCategory />
         ) : name === "newArtical" ? (

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
-const UserDashboard = ({ updateArticleToEdit }) => {
+const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
 
   const [userArticles, setUserArticles] = useState([]);
   const [modal, setModal] = useState(false);
@@ -17,6 +17,8 @@ const UserDashboard = ({ updateArticleToEdit }) => {
   const [categoryModal, setCategoryModal]= useState(false);
   const [selectedCategoryId, setSelectedCategoryId]= useState();
   const [selectedCategory, setSelectedCategory]= useState();
+  const [selectedCategoryToEdit, setSelectedCategoryToEdit] = useState();
+
   //eslint-disable-next-line
   const navigate = useNavigate();
   const authToken = localStorage.getItem("authToken");
@@ -38,6 +40,13 @@ const UserDashboard = ({ updateArticleToEdit }) => {
       updateArticleToEdit(articleToEdit);
     }
   }, [articleToEdit]);
+
+  useEffect(() => {
+    console.log(selectedCategoryToEdit);
+    if (selectedCategoryToEdit) {
+      updateCategoryToEdit(selectedCategoryToEdit);
+    }
+  }, [selectedCategoryToEdit]);
 
   useEffect(() => {
     if (!authToken) {
@@ -149,6 +158,17 @@ const UserDashboard = ({ updateArticleToEdit }) => {
     }
     // updateArticleToEdit(articleToEdit);
   };
+
+  const startCategoryEdit= (event) =>{
+    if(event.target.id){
+      setSelectedCategoryToEdit(
+        allCategories.find((category) => {
+          return category.categoryId === event.target.id;
+        })
+      );
+    }
+    console.log(selectedCategoryToEdit);
+  }
 
   const deleteCategory= async () =>{
     console.log (selectedCategoryId);
@@ -404,6 +424,7 @@ const UserDashboard = ({ updateArticleToEdit }) => {
                           <button
                             className="button is-link"
                             id={category.categoryId}
+                            onClick={startCategoryEdit}
                           >
                             <span className="icon" id={category.categoryId}>
                               <i
@@ -511,4 +532,5 @@ export default UserDashboard;
 
 UserDashboard.propTypes = {
   updateArticleToEdit: PropTypes.any.isRequired,
+  updateCategoryToEdit: PropTypes.any.isRequired,
 };
