@@ -14,6 +14,9 @@ const UserDashboard = ({ updateArticleToEdit }) => {
   const [errors, setErrors] = useState([]);
   const [allCategories, setAllCategories]= useState([]);
   const [categoryDropdown, setCategoryDropdown]= useState(false);
+  const [categoryModal, setCategoryModal]= useState(false);
+  const [selectedCategoryId, setSelectedCategoryId]= useState();
+  const [selectedCategory, setSelectedCategory]= useState();
   //eslint-disable-next-line
   const navigate = useNavigate();
   const authToken = localStorage.getItem("authToken");
@@ -120,6 +123,19 @@ const UserDashboard = ({ updateArticleToEdit }) => {
     setModal(!modal);
   };
 
+  const toggleCategoryModal= (event)=>{
+    if(event.target.id){
+      setSelectedCategoryId(event.target.id);
+
+      setSelectedCategory(
+        allCategories.find((category)=>{
+          return category.categoryId === event.target.id;
+        })
+      )
+    }
+    setCategoryModal(!categoryModal)
+  }
+
   const toggleCategoryDropdown= () =>{
     setCategoryDropdown(!categoryDropdown)
   }
@@ -133,6 +149,39 @@ const UserDashboard = ({ updateArticleToEdit }) => {
     }
     // updateArticleToEdit(articleToEdit);
   };
+
+  const deleteCategory= async () =>{
+    console.log (selectedCategoryId);
+    let categoryIdToDelete = { categoryIdToDelete: selectedCategoryId };
+
+    const response = await fetch("http://localhost:3000/blog/category_delete", {
+      method: "POST",
+      body: JSON.stringify(categoryIdToDelete),
+      headers: headers,
+    });
+
+    if (response.status === 200) {
+      let responseData = await response.json();
+      console.log(responseData);
+    }
+    if (response.status === 400) {
+      let responseData = await response.json();
+      setErrors([responseData.errors]);
+    }
+    if (response.status === 401) {
+      let responseData = await response.json();
+      setErrors([responseData.errors]);
+    }
+    if (response.status === 500) {
+      let responseData = await response.json();
+      setErrors([responseData.errors]);
+    }
+
+    setSelectedCategoryId("");
+    setSelectedCategory("");
+    setCategoryDropdown(false);
+    location.reload();
+  }
 
   const deletePost = async () => {
     console.log(articleToDelete);
@@ -260,37 +309,84 @@ const UserDashboard = ({ updateArticleToEdit }) => {
         </div>
       </section>
 
+      {/* WORKING ON CATEGORY MODAL */}
+
+      <div className={categoryModal ? "modal is-active" : "modal"}>
+        <div className="modal-background" onClick={toggleCategoryModal}></div>
+        <div className="modal-content box">
+          <div className="title mb-1">This is a DESTRUCTIVE ACT!</div>
+          <div>Deleting a category will delete all assosiated articles</div>
+          <div>This act cannot be undone</div>
+          <div className="subtitle is-underlined">
+            Are you sure you want to DELETE the following category:
+          </div>
+
+          {categoryModal && (
+
+            <div className="title mt-3">
+              Category Name: {(selectedCategory.categoryName)}
+            </div>
+
+            // <article className="media box">
+            //   <figure className="media-left">
+            //     <p className="image is-64x64 is-clipped">
+            //       <img
+            //         src={selectedArticle.picture_decoded}
+            //         alt="article picture"
+            //       />
+            //     </p>
+            //   </figure>
+
+            //   <div className="media-content">
+            //     <div className="content">
+            //       <div className="title">{selectedArticle.title}</div>
+
+            //       {selectedArticle.isActive ? (
+            //         <div className="tag is-primary">Active</div>
+            //       ) : (
+            //         <div className="tag is-warning">Not Active</div>
+            //       )}
+            //       <div className="tag">{selectedArticle.category}</div>
+
+            //       <div className="subtitle">{selectedArticle.author}</div>
+            //     </div>
+            //   </div>
+            // </article>
+          )}
+
+          <div className="buttons are-medium">
+            <button
+              className="button is-danger"
+              onClick={deleteCategory} //delete
+            >
+              <span>Delete</span>
+            </button>
+            <button
+              className="button is-dark"
+              onClick={toggleCategoryModal} //cancel delete
+            >
+              <span>Cancel</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div className="section is-small">
         <div className="container">
           <div className={categoryDropdown ? "dropdown is-active" : "dropdown"}>
             <div className="dropdown-trigger">
-              <button className="button is-link" onClick={toggleCategoryDropdown}>
+              <button
+                className="button is-link"
+                onClick={toggleCategoryDropdown}
+              >
                 <span>Categories</span>
                 <span className="icon">
-                  <i className="fas fa-angle-down"></i>
+                  <i className={categoryDropdown ? "fas fa-angle-up" : "fas fa-angle-down"}></i>
                 </span>
               </button>
             </div>
             <div className="dropdown-menu">
               <div className="dropdown-content">
-                {/* <div className="dropdown-item has-text-weight-bold is-underlined my-5">
-                  Item 1
-                  <span>
-                    <div className="buttons">
-                      <button className="button is-link">
-                        <span className="icon">
-                          <i className="fas fa-pencil"></i>
-                        </span>
-                      </button>
-
-                      <button className="button is-danger">
-                        <span className="icon">
-                          <i className="fas fa-trash"></i>
-                        </span>
-                      </button>
-                    </div>
-                  </span>
-                </div> */}
 
                 {/* categoryName: category.name, */}
                 {/* categorySynopsis: category.synopsis, */}
@@ -309,17 +405,24 @@ const UserDashboard = ({ updateArticleToEdit }) => {
                             className="button is-link"
                             id={category.categoryId}
                           >
-                            <span className="icon">
-                              <i className="fas fa-pencil"></i>
+                            <span className="icon" id={category.categoryId}>
+                              <i
+                                className="fas fa-pencil"
+                                id={category.categoryId}
+                              ></i>
                             </span>
                           </button>
 
                           <button
                             className="button is-danger"
                             id={category.categoryId}
+                            onClick={toggleCategoryModal}
                           >
-                            <span className="icon">
-                              <i className="fas fa-trash"></i>
+                            <span className="icon" id={category.categoryId}>
+                              <i
+                                className="fas fa-trash"
+                                id={category.categoryId}
+                              ></i>
                             </span>
                           </button>
                         </div>
@@ -359,20 +462,28 @@ const UserDashboard = ({ updateArticleToEdit }) => {
                     <div className="buttons">
                       <button
                         className="button is-link"
+                        id={article.articleId}
                         onClick={startArticleEdit} //edit post
                       >
-                        <span className="icon">
-                          <i className="fas fa-pencil"></i>
+                        <span className="icon" id={article.articleId}>
+                          <i
+                            className="fas fa-pencil"
+                            id={article.articleId}
+                          ></i>
                         </span>
                         <span id={article.articleId}>Edit</span>
                       </button>
 
                       <button
                         className="button is-danger"
+                        id={article.articleId}
                         onClick={toggleModal} //toggle delete modal
                       >
-                        <span className="icon">
-                          <i className="fas fa-trash"></i>
+                        <span className="icon" id={article.articleId}>
+                          <i
+                            className="fas fa-trash"
+                            id={article.articleId}
+                          ></i>
                         </span>
                         <span id={article.articleId}>Delete</span>
                       </button>
