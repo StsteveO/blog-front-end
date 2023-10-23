@@ -18,6 +18,7 @@ const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
   const [selectedCategoryId, setSelectedCategoryId]= useState();
   const [selectedCategory, setSelectedCategory]= useState();
   const [selectedCategoryToEdit, setSelectedCategoryToEdit] = useState();
+  const [accountModal, setAccountModal]= useState(false);
 
   //eslint-disable-next-line
   const navigate = useNavigate();
@@ -149,6 +150,10 @@ const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
     setCategoryModal(!categoryModal)
   }
 
+  const toggleAccountModal= ()=>{
+    setAccountModal(!accountModal);
+  }
+
   const toggleCategoryDropdown= () =>{
     setCategoryDropdown(!categoryDropdown)
   }
@@ -238,6 +243,31 @@ const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
     setModal(false);
     location.reload();
   };
+
+  const deleteAccount= async ()=>{
+    const response = await fetch("http://localhost:3000/blog/account_delete", {
+      method: "GET",
+      headers: headers,
+    });
+
+    if (response.status === 200) {
+      let responseData = await response.json();
+      console.log(responseData);
+      navigate("/");
+    }
+    if (response.status === 400) {
+      let responseData = await response.json();
+      setErrors([responseData.errors]);
+    }
+    if (response.status === 401) {
+      let responseData = await response.json();
+      setErrors([responseData.errors]);
+    }
+    if (response.status === 500) {
+      let responseData = await response.json();
+      setErrors([responseData.errors]);
+    }
+  }
 
   return (
     <>
@@ -340,7 +370,7 @@ const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
             <span>Edit Account</span>
           </button>
 
-          <button className="button is-danger" onClick={""}>
+          <button className="button is-danger" onClick={toggleAccountModal}>
             <span className="icon">
               <i className="fas fa-triangle-exclamation"></i>
             </span>
@@ -348,6 +378,35 @@ const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
           </button>
         </div>
       </section>
+
+      {/* ACCOUNT MODAL */}
+
+      <div className={accountModal ? "modal is-active" : "modal"}>
+        <div className="modal-background" onClick={toggleAccountModal}></div>
+        <div className="modal-content box">
+          <div className="title mb-1">This is a DESTRUCTIVE ACT!</div>
+          <div>Deleting your account will delete all assosiated articles</div>
+          <div>This act cannot be undone</div>
+          <div className="subtitle is-underlined">
+            Are you sure you want to DELETE your account?
+          </div>
+
+          <div className="buttons are-medium">
+            <button
+              className="button is-danger"
+              onClick={deleteAccount} //delete
+            >
+              <span>Delete</span>
+            </button>
+            <button
+              className="button is-dark"
+              onClick={toggleAccountModal} //cancel delete
+            >
+              <span>Cancel</span>
+            </button>
+          </div>
+        </div>
+      </div>
 
       {/* WORKING ON CATEGORY MODAL */}
 
