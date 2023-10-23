@@ -46,7 +46,8 @@ export default function Nav() {
         >
           <div className="navbar-start">
             <Link to="/" className={location.pathname ==="/" ? "navbar-item is-active is-tab" : "navbar-item"}>Home</Link>
-            <Link to="/aboutUs" className={location.pathname ==="/aboutUs" ? "navbar-item is-active is-tab" : "navbar-item"}>About Us</Link>
+            <Link to="/aboutUs" className={location.pathname ==="/aboutUs" ? "navbar-item is-active is-tab" : "navbar-item"}>About blogDev</Link>
+            <Link to="/userDashboard" className={location.pathname ==="/userDashboard" ? "navbar-item is-active is-tab" : "navbar-item"}>User Dashboard</Link>
             {/* <a className="navbar-item">Contacts</a> */}
 
             {/* <div className="navbar-item has-dropdown is-hoverable">

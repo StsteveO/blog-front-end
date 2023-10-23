@@ -13,6 +13,14 @@ const SingleCategory = ({
     navigate("/");
   }
 
+  function errorHandleIfNoCategory(){
+    if(!categoryTitle){
+      navigate("/");
+    }
+  }
+
+  errorHandleIfNoCategory()
+
   return (
     <>
       <button className="button is-link is-small mb-5" onClick={handleHomeBtn}>

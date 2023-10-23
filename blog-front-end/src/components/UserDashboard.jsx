@@ -64,6 +64,30 @@ const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
 
   useEffect(() => {
     fetch("http://localhost:3000/blog/articles_user", {
+      method: "GET",
+      headers: headers,
+    })
+      .then((response) => {
+        if (response.status === 401) {
+          // Handle the 401 status here
+          console.error("Unauthorized. Please log in.");
+          navigate("/login");
+        }
+        return response.json();
+      })
+      // .then((data) => {
+      //   // Process the response data (if status is not 401)
+      //   console.log(data);
+      // })
+      .catch((error) => {
+        // Handle other errors (e.g., network errors)
+        console.error("Fetch error:", error);
+      });
+  }, []);
+
+
+  useEffect(() => {
+    fetch("http://localhost:3000/blog/articles_user", {
       headers: headers,
     })
       .then((response) => response.json())
