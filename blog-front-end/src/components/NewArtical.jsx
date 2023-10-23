@@ -247,6 +247,7 @@ const NewArtical = () => {
                     value={formData.category || ""}
                     onChange={handleCategorySelectFormChange}
                   >
+                    <option>Please pick a category</option>
                     {categories.map((category) => (
                       <option key={category._id} value={category._id}>
                         {category.name}
