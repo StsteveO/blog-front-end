@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import SingleCategory from "./components/SingleCategory";
 import EditArticle from "./components/EditArticle";
 import EditCategory from "./components/EditCategory";
+import EditAccount from "./components/EditAccount";
 
 // example
 //<div className="icon-text">
@@ -109,7 +110,9 @@ function App() {
       <Hero title={websiteTitle} subtitle={websiteSubtitle} />
 
       <div>
-        {name === "editCategory" ? (
+        {name === "editAccount" ? (
+          <EditAccount />
+        ) : name === "editCategory" ? (
           <EditCategory categoryToEdit={categoryToEdit} />
         ) : name === "editArticle" ? (
           <EditArticle articleToEdit={articleToEdit} />

@@ -103,7 +103,7 @@ const EditCategory = ({ categoryToEdit }) => {
 
   return (
     <>
-      <div className="section title">New Category</div>
+      <div className="section title">Edit Category</div>
 
       <section className="section">
         <form onSubmit={handleFormSubmit}>

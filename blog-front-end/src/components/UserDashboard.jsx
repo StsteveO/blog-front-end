@@ -88,7 +88,7 @@ const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:3000/blog//category_list", {
+    fetch("http://localhost:3000/blog/category_list", {
       headers: headers,
     })
       .then((response) => response.json())
@@ -118,6 +118,10 @@ const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
   const handleNewArtical = () => {
     navigate("/newArtical");
   };
+
+  const handleEditAccount= () =>{
+    navigate("/editAccount");
+  }
 
   const toggleModal = (event) => {
     if (event.target.id) {
@@ -327,6 +331,22 @@ const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
             <span>Log out</span>
           </button>
         </div>
+
+        <div className="buttons are-medium">
+          <button className="button is-link" onClick={handleEditAccount}>
+            <span className="icon">
+              <i className="fas fa-pencil"></i>
+            </span>
+            <span>Edit Account</span>
+          </button>
+
+          <button className="button is-danger" onClick={""}>
+            <span className="icon">
+              <i className="fas fa-triangle-exclamation"></i>
+            </span>
+            <span>Delete Account</span>
+          </button>
+        </div>
       </section>
 
       {/* WORKING ON CATEGORY MODAL */}
@@ -342,9 +362,8 @@ const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
           </div>
 
           {categoryModal && (
-
             <div className="title mt-3">
-              Category Name: {(selectedCategory.categoryName)}
+              Category Name: {selectedCategory.categoryName}
             </div>
 
             // <article className="media box">
@@ -401,13 +420,16 @@ const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
               >
                 <span>Categories</span>
                 <span className="icon">
-                  <i className={categoryDropdown ? "fas fa-angle-up" : "fas fa-angle-down"}></i>
+                  <i
+                    className={
+                      categoryDropdown ? "fas fa-angle-up" : "fas fa-angle-down"
+                    }
+                  ></i>
                 </span>
               </button>
             </div>
             <div className="dropdown-menu">
               <div className="dropdown-content">
-
                 {/* categoryName: category.name, */}
                 {/* categorySynopsis: category.synopsis, */}
                 {/* categoryId: category._id, */}
