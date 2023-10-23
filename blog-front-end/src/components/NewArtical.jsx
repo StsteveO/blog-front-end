@@ -265,6 +265,14 @@ const NewArtical = () => {
             <label className="label">
               {" "}
               Main Picture:
+              <br />
+              For best results, go to{" "}
+              <a href="https://unsplash.com/" target="_blank" rel="noreferrer noopener">
+                Unsplash.com.
+              </a>{" "}
+              Right click on any picture of your choice and select{" "}
+              <em>Copy image address</em>. Paste the image address in the below
+              field.
               <div className="control has-icons-left">
                 <input
                   name="article_picture"
