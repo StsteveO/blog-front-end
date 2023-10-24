@@ -36,7 +36,7 @@ const EditCategory = ({ categoryToEdit }) => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "http://blog-api-production-f2ce.up.railway.app/blog/category_list",
+          "https://blog-api-production-f2ce.up.railway.app/blog/category_list",
           {
             method: "GET",
             headers: headers,
@@ -75,7 +75,7 @@ const EditCategory = ({ categoryToEdit }) => {
     //eslint-disable-next-line
     try {
       const response = await fetch(
-        "http://blog-api-production-f2ce.up.railway.app/blog/category_update",
+        "https://blog-api-production-f2ce.up.railway.app/blog/category_update",
         {
           method: "POST",
           body: JSON.stringify(formData),

@@ -65,7 +65,7 @@ const EditArticle = ({ articleToEdit }) => {
     const fetchUserData = async () => {
       try {
         const response = await fetch(
-          "http://blog-api-production-f2ce.up.railway.app/blog/article_list",
+          "https://blog-api-production-f2ce.up.railway.app/blog/article_list",
           {
             method: "GET",
             headers: headers,
@@ -92,7 +92,7 @@ const EditArticle = ({ articleToEdit }) => {
     const fetchCategoryListData = async () => {
       try {
         const response = await fetch(
-          "http://blog-api-production-f2ce.up.railway.app/blog/category_list",
+          "https://blog-api-production-f2ce.up.railway.app/blog/category_list",
           {
             method: "GET",
             headers: headers,
@@ -151,7 +151,7 @@ const EditArticle = ({ articleToEdit }) => {
     //eslint-disable-next-line
     try {
       const response = await fetch(
-        "http://blog-api-production-f2ce.up.railway.app/blog/article_update",
+        "https://blog-api-production-f2ce.up.railway.app/blog/article_update",
         {
           method: "POST",
           body: JSON.stringify(formData),

@@ -10,29 +10,32 @@ const SignUp = () => {
     password: "",
     passwordConfirmation: "",
   });
-  const [passwordsMatch, setPasswordsMatch]= useState(true);
-  const formRef= useRef(null);
-  const [errors, setErrors]= useState([]);
-  const navigate= useNavigate();
+  const [passwordsMatch, setPasswordsMatch] = useState(true);
+  const formRef = useRef(null);
+  const [errors, setErrors] = useState([]);
+  const navigate = useNavigate();
 
-  const handleFormChange= (event) =>{
-    const name= event.target.name;
-    const value= event.target.value;
-    setFormData(values => ({...values, [name]: value}));
-  }
+  const handleFormChange = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    setFormData((values) => ({ ...values, [name]: value }));
+  };
 
-  const handleFormSubmit = async(event) => {
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
-    if(formData.password === formData.passwordConfirmation){
+    if (formData.password === formData.passwordConfirmation) {
       setPasswordsMatch(true);
       //formRef.current.submit(); //submits the form
-      const response= await fetch("http://localhost:3000/blog/sign_up", {
-        method: "POST",
-        body: JSON.stringify(formData),
-        headers:{
-        "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        "https://blog-api-production-f2ce.up.railway.app/blog/sign_up",
+        {
+          method: "POST",
+          body: JSON.stringify(formData),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.status === 200) {
         navigate("/login");
@@ -43,7 +46,7 @@ const SignUp = () => {
         let responseData = await response.json();
         setErrors(responseData.errors);
       }
-    }else{
+    } else {
       setPasswordsMatch(false);
     }
   };
@@ -53,7 +56,12 @@ const SignUp = () => {
       <div className="section title">Sign Up</div>
 
       <section className="section">
-        <form ref={formRef} onSubmit={handleFormSubmit} method="POST" action="http://localhost:3000/blog/sign_up">
+        <form
+          ref={formRef}
+          onSubmit={handleFormSubmit}
+          method="POST"
+          action="https://blog-api-production-f2ce.up.railway.app/blog/sign_up"
+        >
           <div className="field">
             <label className="label">
               {" "}
@@ -148,7 +156,11 @@ const SignUp = () => {
                   name="passwordConfirmation"
                   value={formData.passwordConfirmation || ""}
                   onChange={handleFormChange}
-                  className={passwordsMatch ? "input is-medium" : "input is-medium is-danger"} //"input is-medium"
+                  className={
+                    passwordsMatch
+                      ? "input is-medium"
+                      : "input is-medium is-danger"
+                  } //"input is-medium"
                   type="password"
                   placeholder="Confirm Password"
                   required
@@ -160,12 +172,16 @@ const SignUp = () => {
             </label>
           </div>
 
-          {!passwordsMatch && (<p className="notification is-danger is-size-4">Passwords do not match.</p>)}
+          {!passwordsMatch && (
+            <p className="notification is-danger is-size-4">
+              Passwords do not match.
+            </p>
+          )}
           {errors.length > 0 && (
             <div className="notification is-danger is-size-4">
               <p>Validation Errors</p>
               <ul>
-                {errors.map((error, index)=>(
+                {errors.map((error, index) => (
                   <li key={index}>{error.msg}</li>
                 ))}
               </ul>

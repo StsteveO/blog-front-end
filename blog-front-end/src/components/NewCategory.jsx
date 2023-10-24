@@ -31,10 +31,13 @@ const NewCategory = () => {
 
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/blog/category_list", {
-          method: "GET",
-          headers: headers,
-        });
+        const response = await fetch(
+          "https://blog-api-production-f2ce.up.railway.app/blog/category_list",
+          {
+            method: "GET",
+            headers: headers,
+          }
+        );
 
         if (response.status === 200) {
           // console.log("Successfully fetched categories");
@@ -66,29 +69,32 @@ const NewCategory = () => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     //eslint-disable-next-line
-    try{
-      const response = await fetch("http://localhost:3000/blog/category_create", {
-      method: "POST",
-      body: JSON.stringify(formData),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    try {
+      const response = await fetch(
+        "https://blog-api-production-f2ce.up.railway.app/blog/category_create",
+        {
+          method: "POST",
+          body: JSON.stringify(formData),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-    if (response.status === 200) {
-      navigate("/userDashboard");
-    } else if (response.status === 400) {
-      let responseData = await response.json();
-      setErrors([responseData.errors]);
-      // console.log(responseData);
-    } else if (response.status === 401) {
-      let responseData = await response.json();
-      setErrors([responseData.errors]);
-    } else if (response.status === 500) {
-      let responseData = await response.json();
-      setErrors([responseData.errors]);
-    }
-  }catch(error){
+      if (response.status === 200) {
+        navigate("/userDashboard");
+      } else if (response.status === 400) {
+        let responseData = await response.json();
+        setErrors([responseData.errors]);
+        // console.log(responseData);
+      } else if (response.status === 401) {
+        let responseData = await response.json();
+        setErrors([responseData.errors]);
+      } else if (response.status === 500) {
+        let responseData = await response.json();
+        setErrors([responseData.errors]);
+      }
+    } catch (error) {
       console.error(error);
     }
   };
@@ -155,23 +161,25 @@ const NewCategory = () => {
       </section>
 
       {errors.length > 0 && (
-            <div className="notification is-danger is-size-4">
-              <p>Validation Errors</p>
-              <ul>
-                {errors.map((error, index) => (
-                  <li key={index}>{error.msg}</li>
-                ))}
-              </ul>
-            </div>
-          )}
+        <div className="notification is-danger is-size-4">
+          <p>Validation Errors</p>
+          <ul>
+            {errors.map((error, index) => (
+              <li key={index}>{error.msg}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <section className="section">
         <div className="title">Categories</div>
-        {categories && <ul>
-          {categories.map((category) => (
-            <li key={category._id}>{category.name}</li> //just the name, not the synopsis
-          ))}
-        </ul>}
+        {categories && (
+          <ul>
+            {categories.map((category) => (
+              <li key={category._id}>{category.name}</li> //just the name, not the synopsis
+            ))}
+          </ul>
+        )}
       </section>
     </>
   );
