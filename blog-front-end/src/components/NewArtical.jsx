@@ -50,7 +50,7 @@ const NewArtical = () => {
     const fetchUserData = async () => {
       try {
         const response = await fetch(
-          "http://blog-api-production-f2ce.up.railway.app/article_list",
+          "http://blog-api-production-f2ce.up.railway.app/blog/article_list",
           {
             method: "GET",
             headers: headers,
@@ -77,7 +77,7 @@ const NewArtical = () => {
     const fetchCategoryListData = async () => {
       try {
         const response = await fetch(
-          "http://blog-api-production-f2ce.up.railway.app/category_list",
+          "http://blog-api-production-f2ce.up.railway.app/blog/category_list",
           {
             method: "GET",
             headers: headers,
@@ -136,7 +136,7 @@ const NewArtical = () => {
     //eslint-disable-next-line
     try {
       const response = await fetch(
-        "http://blog-api-production-f2ce.up.railway.app/artical_create",
+        "http://blog-api-production-f2ce.up.railway.app/blog/artical_create",
         {
           method: "POST",
           body: JSON.stringify(formData),

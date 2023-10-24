@@ -24,7 +24,7 @@ const Login = () => {
     event.preventDefault();
     //eslint-disable-next-line
     const response = await fetch(
-      "http://blog-api-production-f2ce.up.railway.app/login",
+      "http://blog-api-production-f2ce.up.railway.app/blog/login",
       {
         method: "POST",
         body: JSON.stringify(formData),

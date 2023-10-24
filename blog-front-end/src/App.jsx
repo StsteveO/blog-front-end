@@ -55,7 +55,7 @@ function App() {
   const [categoryToEdit, setCategoryToEdit] = useState([]);
 
   useEffect(() => {
-    fetch("http://blog-api-production-f2ce.up.railway.app/articles_client")
+    fetch("http://blog-api-production-f2ce.up.railway.app/blog/articles_client")
       .then((response) => response.json())
       .then((data) => {
         const clientArticlesData = data.map((article) => {

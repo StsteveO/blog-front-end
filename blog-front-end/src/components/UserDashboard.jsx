@@ -62,7 +62,7 @@ const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
   };
 
   useEffect(() => {
-    fetch("http://blog-api-production-f2ce.up.railway.app/articles_user", {
+    fetch("http://blog-api-production-f2ce.up.railway.app/blog/articles_user", {
       method: "GET",
       headers: headers,
     })
@@ -85,7 +85,7 @@ const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
   }, []);
 
   useEffect(() => {
-    fetch("http://blog-api-production-f2ce.up.railway.app/articles_user", {
+    fetch("http://blog-api-production-f2ce.up.railway.app/blog/articles_user", {
       headers: headers,
     })
       .then((response) => response.json())
@@ -111,7 +111,7 @@ const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
   }, []);
 
   useEffect(() => {
-    fetch("http://blog-api-production-f2ce.up.railway.app/category_list", {
+    fetch("http://blog-api-production-f2ce.up.railway.app/blog/category_list", {
       headers: headers,
     })
       .then((response) => response.json())
@@ -206,7 +206,7 @@ const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
     let categoryIdToDelete = { categoryIdToDelete: selectedCategoryId };
 
     const response = await fetch(
-      "http://blog-api-production-f2ce.up.railway.app/category_delete",
+      "http://blog-api-production-f2ce.up.railway.app/blog/category_delete",
       {
         method: "POST",
         body: JSON.stringify(categoryIdToDelete),
@@ -241,7 +241,7 @@ const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
     console.log(articleToDelete);
     let articleToDeleteObj = { articleToDelete: articleToDelete };
     const response = await fetch(
-      "http://blog-api-production-f2ce.up.railway.app/article_delete",
+      "http://blog-api-production-f2ce.up.railway.app/blog/article_delete",
       {
         method: "POST",
         body: JSON.stringify(articleToDeleteObj),
@@ -274,7 +274,7 @@ const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
 
   const deleteAccount = async () => {
     const response = await fetch(
-      "http://blog-api-production-f2ce.up.railway.app/account_delete",
+      "http://blog-api-production-f2ce.up.railway.app/blog/account_delete",
       {
         method: "GET",
         headers: headers,
