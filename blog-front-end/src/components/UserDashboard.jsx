@@ -5,20 +5,19 @@ import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
 const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
-
   const [userArticles, setUserArticles] = useState([]);
   const [modal, setModal] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState();
   const [articleToDelete, setArticleToDelete] = useState();
   const [articleToEdit, setArticleToEdit] = useState();
   const [errors, setErrors] = useState([]);
-  const [allCategories, setAllCategories]= useState([]);
-  const [categoryDropdown, setCategoryDropdown]= useState(false);
-  const [categoryModal, setCategoryModal]= useState(false);
-  const [selectedCategoryId, setSelectedCategoryId]= useState();
-  const [selectedCategory, setSelectedCategory]= useState();
+  const [allCategories, setAllCategories] = useState([]);
+  const [categoryDropdown, setCategoryDropdown] = useState(false);
+  const [categoryModal, setCategoryModal] = useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState();
+  const [selectedCategory, setSelectedCategory] = useState();
   const [selectedCategoryToEdit, setSelectedCategoryToEdit] = useState();
-  const [accountModal, setAccountModal]= useState(false);
+  const [accountModal, setAccountModal] = useState(false);
 
   //eslint-disable-next-line
   const navigate = useNavigate();
@@ -36,7 +35,7 @@ const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
   useEffect(() => {
     // console.log("articleToEdit has changed");
     console.log(articleToEdit);
-    if (articleToEdit){
+    if (articleToEdit) {
       console.log("not empty");
       updateArticleToEdit(articleToEdit);
     }
@@ -63,7 +62,7 @@ const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
   };
 
   useEffect(() => {
-    fetch("http://localhost:3000/blog/articles_user", {
+    fetch("http://blog-api-production-f2ce.up.railway.app/articles_user", {
       method: "GET",
       headers: headers,
     })
@@ -85,9 +84,8 @@ const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
       });
   }, []);
 
-
   useEffect(() => {
-    fetch("http://localhost:3000/blog/articles_user", {
+    fetch("http://blog-api-production-f2ce.up.railway.app/articles_user", {
       headers: headers,
     })
       .then((response) => response.json())
@@ -113,7 +111,7 @@ const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:3000/blog/category_list", {
+    fetch("http://blog-api-production-f2ce.up.railway.app/category_list", {
       headers: headers,
     })
       .then((response) => response.json())
@@ -144,9 +142,9 @@ const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
     navigate("/newArtical");
   };
 
-  const handleEditAccount= () =>{
+  const handleEditAccount = () => {
     navigate("/editAccount");
-  }
+  };
 
   const toggleModal = (event) => {
     if (event.target.id) {
@@ -161,26 +159,26 @@ const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
     setModal(!modal);
   };
 
-  const toggleCategoryModal= (event)=>{
-    if(event.target.id){
+  const toggleCategoryModal = (event) => {
+    if (event.target.id) {
       setSelectedCategoryId(event.target.id);
 
       setSelectedCategory(
-        allCategories.find((category)=>{
+        allCategories.find((category) => {
           return category.categoryId === event.target.id;
         })
-      )
+      );
     }
-    setCategoryModal(!categoryModal)
-  }
+    setCategoryModal(!categoryModal);
+  };
 
-  const toggleAccountModal= ()=>{
+  const toggleAccountModal = () => {
     setAccountModal(!accountModal);
-  }
+  };
 
-  const toggleCategoryDropdown= () =>{
-    setCategoryDropdown(!categoryDropdown)
-  }
+  const toggleCategoryDropdown = () => {
+    setCategoryDropdown(!categoryDropdown);
+  };
 
   const startArticleEdit = (event) => {
     if (event.target.id) {
@@ -192,8 +190,8 @@ const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
     // updateArticleToEdit(articleToEdit);
   };
 
-  const startCategoryEdit= (event) =>{
-    if(event.target.id){
+  const startCategoryEdit = (event) => {
+    if (event.target.id) {
       setSelectedCategoryToEdit(
         allCategories.find((category) => {
           return category.categoryId === event.target.id;
@@ -201,17 +199,20 @@ const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
       );
     }
     console.log(selectedCategoryToEdit);
-  }
+  };
 
-  const deleteCategory= async () =>{
-    console.log (selectedCategoryId);
+  const deleteCategory = async () => {
+    console.log(selectedCategoryId);
     let categoryIdToDelete = { categoryIdToDelete: selectedCategoryId };
 
-    const response = await fetch("http://localhost:3000/blog/category_delete", {
-      method: "POST",
-      body: JSON.stringify(categoryIdToDelete),
-      headers: headers,
-    });
+    const response = await fetch(
+      "http://blog-api-production-f2ce.up.railway.app/category_delete",
+      {
+        method: "POST",
+        body: JSON.stringify(categoryIdToDelete),
+        headers: headers,
+      }
+    );
 
     if (response.status === 200) {
       let responseData = await response.json();
@@ -234,16 +235,19 @@ const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
     setSelectedCategory("");
     setCategoryDropdown(false);
     location.reload();
-  }
+  };
 
   const deletePost = async () => {
     console.log(articleToDelete);
     let articleToDeleteObj = { articleToDelete: articleToDelete };
-    const response = await fetch("http://localhost:3000/blog/article_delete", {
-      method: "POST",
-      body: JSON.stringify(articleToDeleteObj),
-      headers: headers,
-    });
+    const response = await fetch(
+      "http://blog-api-production-f2ce.up.railway.app/article_delete",
+      {
+        method: "POST",
+        body: JSON.stringify(articleToDeleteObj),
+        headers: headers,
+      }
+    );
 
     if (response.status === 200) {
       let responseData = await response.json();
@@ -268,11 +272,14 @@ const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
     location.reload();
   };
 
-  const deleteAccount= async ()=>{
-    const response = await fetch("http://localhost:3000/blog/account_delete", {
-      method: "GET",
-      headers: headers,
-    });
+  const deleteAccount = async () => {
+    const response = await fetch(
+      "http://blog-api-production-f2ce.up.railway.app/account_delete",
+      {
+        method: "GET",
+        headers: headers,
+      }
+    );
 
     if (response.status === 200) {
       let responseData = await response.json();
@@ -291,7 +298,7 @@ const UserDashboard = ({ updateArticleToEdit, updateCategoryToEdit }) => {
       let responseData = await response.json();
       setErrors([responseData.errors]);
     }
-  }
+  };
 
   return (
     <>

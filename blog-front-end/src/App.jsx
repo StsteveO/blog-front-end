@@ -49,13 +49,13 @@ function App() {
 
   const [clientArticles, setClientArticles] = useState([]);
   const [article, setArticle] = useState();
-  const [categoryTitle, setCategoryTitle]= useState();
-  const [singleCategoryList, setSingleCategoryList]= useState([]);
-  const [articleToEdit, setArticleToEdit]= useState([]);
-  const [categoryToEdit, setCategoryToEdit]= useState([]);
+  const [categoryTitle, setCategoryTitle] = useState();
+  const [singleCategoryList, setSingleCategoryList] = useState([]);
+  const [articleToEdit, setArticleToEdit] = useState([]);
+  const [categoryToEdit, setCategoryToEdit] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/blog/articles_client")
+    fetch("http://blog-api-production-f2ce.up.railway.app/articles_client")
       .then((response) => response.json())
       .then((data) => {
         const clientArticlesData = data.map((article) => {
@@ -84,22 +84,22 @@ function App() {
     navigate("/singleArtical");
   }
 
-  function singlePickedCategory(event){
+  function singlePickedCategory(event) {
     let categoryName = event.target.innerText;
-    let singleCategoryArticles= clientArticles.filter((article)=>{
-      return article.categoryId=== event.target.id
-    })
+    let singleCategoryArticles = clientArticles.filter((article) => {
+      return article.categoryId === event.target.id;
+    });
     setCategoryTitle(categoryName);
     setSingleCategoryList(singleCategoryArticles);
     navigate("/singlecategory");
   }
 
-  function updateArticleToEdit(newStateObj){
+  function updateArticleToEdit(newStateObj) {
     setArticleToEdit(newStateObj);
     navigate("/editArticle");
   }
 
-  function updateCategoryToEdit(newStateObj){
+  function updateCategoryToEdit(newStateObj) {
     setCategoryToEdit(newStateObj);
     navigate("/editCategory");
   }

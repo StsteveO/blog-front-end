@@ -33,7 +33,7 @@ const EditAccount = () => {
   };
 
   useEffect(() => {
-    fetch("http://localhost:3000/blog/account_edit", {
+    fetch("http://blog-api-production-f2ce.up.railway.app/account_edit", {
       headers: headers,
     })
       .then((response) => response.json())
@@ -57,7 +57,7 @@ const EditAccount = () => {
   //   userId: "6507b150d60785f8a8121187";
   //   username: "user";
 
-//   console.log(formData)
+  //   console.log(formData)
 
   const handleFormChange = (event) => {
     const name = event.target.name;
@@ -71,7 +71,7 @@ const EditAccount = () => {
       setPasswordsMatch(true);
       //formRef.current.submit(); //submits the form
       const response = await fetch(
-        "http://localhost:3000/blog/account_update",
+        "http://blog-api-production-f2ce.up.railway.app/account_update",
         {
           method: "POST",
           body: JSON.stringify(formData),
@@ -102,7 +102,7 @@ const EditAccount = () => {
           ref={formRef}
           onSubmit={handleFormSubmit}
           method="POST"
-          action="http://localhost:3000/blog/account_update"
+          action="http://blog-api-production-f2ce.up.railway.app/account_update"
         >
           <div className="field">
             <label className="label">

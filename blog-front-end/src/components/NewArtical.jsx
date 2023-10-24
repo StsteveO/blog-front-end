@@ -50,7 +50,7 @@ const NewArtical = () => {
     const fetchUserData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3000/blog/article_list",
+          "http://blog-api-production-f2ce.up.railway.app/article_list",
           {
             method: "GET",
             headers: headers,
@@ -77,7 +77,7 @@ const NewArtical = () => {
     const fetchCategoryListData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3000/blog/category_list",
+          "http://blog-api-production-f2ce.up.railway.app/category_list",
           {
             method: "GET",
             headers: headers,
@@ -136,7 +136,7 @@ const NewArtical = () => {
     //eslint-disable-next-line
     try {
       const response = await fetch(
-        "http://localhost:3000/blog/artical_create",
+        "http://blog-api-production-f2ce.up.railway.app/artical_create",
         {
           method: "POST",
           body: JSON.stringify(formData),
@@ -171,7 +171,7 @@ const NewArtical = () => {
   //   }
   // };
 
-  function updateArticleBody(){
+  function updateArticleBody() {
     console.log(editorRef.current.getContent());
     setFormData((values) => ({
       ...values,
@@ -268,7 +268,11 @@ const NewArtical = () => {
               Main Picture:
               <br />
               For best results, go to{" "}
-              <a href="https://unsplash.com/" target="_blank" rel="noreferrer noopener">
+              <a
+                href="https://unsplash.com/"
+                target="_blank"
+                rel="noreferrer noopener"
+              >
                 Unsplash.com.
               </a>{" "}
               Right click on any picture of your choice and select{" "}

@@ -20,31 +20,34 @@ const Login = () => {
     setFormData((values) => ({ ...values, [name]: value }));
   };
   //eslint-disable-next-line
-  const handleFormSubmit = async(event) => {
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
     //eslint-disable-next-line
-    const response = await fetch("http://localhost:3000/blog/login", {
-      method: "POST",
-      body: JSON.stringify(formData),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      "http://blog-api-production-f2ce.up.railway.app/login",
+      {
+        method: "POST",
+        body: JSON.stringify(formData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-    if(response.status === 200){
-      const responseData= await response.json();
-      const token= responseData.token
+    if (response.status === 200) {
+      const responseData = await response.json();
+      const token = responseData.token;
       localStorage.setItem("authToken", token);
       // localStorage.setItem("userId", responseData.userId);
       navigate("/userDashboard");
-    }else if(response.status === 400){
-      let responseData= await response.json();
+    } else if (response.status === 400) {
+      let responseData = await response.json();
       setErrors([responseData.errors]);
-    }else if(response.status === 401){
-      let responseData= await response.json();
-      setErrors([responseData.errors])
-    }else if(response.status === 500){
-      let responseData= await response.json();
+    } else if (response.status === 401) {
+      let responseData = await response.json();
+      setErrors([responseData.errors]);
+    } else if (response.status === 500) {
+      let responseData = await response.json();
       setErrors([responseData.errors]);
     }
   };
