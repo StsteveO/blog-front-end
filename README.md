@@ -1,4 +1,5 @@
 # blog (front-end)
+[Click here to go to live site](https://blogdevop.netlify.app/)
 
 ### Technologies Used: 
 -Utilizes React, and Bulma for styling. 
