@@ -108,7 +108,7 @@ const SignUp = () => {
           <div className="field">
             <label className="label">
               {" "}
-              Username:
+              Username, case sensitive:
               <div className="control has-icons-left">
                 <input
                   name="username"
@@ -129,7 +129,7 @@ const SignUp = () => {
           <div className="field">
             <label className="label">
               {" "}
-              Password:
+              Password, case sensitive:
               <div className="control has-icons-left">
                 <input
                   name="password"
